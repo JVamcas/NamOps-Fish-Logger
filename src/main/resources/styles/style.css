@@ -1,0 +1,18 @@
+#driverIdCodeLabel {
+    -fx-background-image: url("images/driverIcon.jpg");
+    -fx-background-size: 10% 10%;
+    -fx-background-repeat: no-repeat;
+}
+
+.bodybg {
+    -fx-background-image: url("images/seaNamLogo.png");
+    -fx-background-size: 50% 50%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.text-field, .combo-box {
+    -fx-opacity: 0.6;
+    /*-fx-prompt-text-fill: #FF5733;*/
+    -fx-text-fill: black;
+}

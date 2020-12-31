@@ -1,6 +1,6 @@
-package com.example.demo.view
+package com.pet001kambala.fishlogger.view
 
-import com.example.demo.app.Styles
+import com.pet001kambala.fishlogger.app.Styles
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
