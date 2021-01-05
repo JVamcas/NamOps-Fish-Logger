@@ -18,28 +18,6 @@ class HomeController : AbstractView("") {
     private val pit_4: Button by fxid("pit_2")
 
 
-    init {
-
-//        pit_1.apply {
-//            val image = Image(FileInputStream("C:\\Users\\user\\IdeaProjects\\NamOps Bins Logger\\src\\main\\resources\\styles\\images\\pit_icon.png"))
-//            val imageView = ImageView(image)
-//            val ratio = image.width / image.height
-//
-//            imageView.fitWidth = width
-//            imageView.fitHeight = width / ratio
-//            imageView.isPreserveRatio = true
-//
-//            graphic = imageView
-//
-//        }
-
-//        driverIdCodeLabel.apply {
-//            val image = Image(FileInputStream("C:\\Users\\user\\IdeaProjects\\NamOps Bins Logger\\src\\main\\resources\\images\\driverIcon.jpg"))
-//            val imageView = ImageView(image)
-//            graphic = imageView
-//        }
-    }
-
 
     override fun onDock() {
         super.onDock()

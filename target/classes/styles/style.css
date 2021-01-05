@@ -1,7 +1,24 @@
-#driverIdCodeLabel {
-    -fx-background-image: url("images/driverIcon.jpg");
-    -fx-background-size: 10% 10%;
+
+#driverIcon, #factoryIcon, #waybillIcon, #fishTypeIcon, #binIcon{
+    -fx-background-size: 80px 70px;
     -fx-background-repeat: no-repeat;
+}
+
+#driverIcon {
+    -fx-background-image: url("images/driver_icon.png");
+}
+#factoryIcon{
+    -fx-background-image: url("images/factory_icon.png");
+}
+#waybillIcon{
+    -fx-background-image: url("images/waybill_icon.png");
+}
+#fishTypeIcon{
+    -fx-background-image: url("images/fish_icon.png");
+}
+
+#binIcon{
+    -fx-background-image: url("images/binIcon.png");
 }
 
 .bodybg {
@@ -11,27 +28,22 @@
     -fx-background-position: center center;
 }
 
-.text-field, .combo-box {
-    -fx-opacity: 0.6;
-    /*-fx-prompt-text-fill: #FF5733;*/
-    -fx-text-fill: black;
-}
-
 #scale {
-    -fx-background-repeat: no-repeat;
     -fx-background-image: url("images/digital_scale.png");
     -fx-background-size: 110px 60px;
+}
+#pit_1,  #pit_2, #pit_3, #pit_4, #scale{
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
     -fx-background-position: center 8px;
-
+    -fx-focus-traversable: true;
 }
 
 #pit_1,  #pit_2, #pit_3, #pit_4 {
-    -fx-background-repeat: no-repeat;
     -fx-background-image: url("images/pit_icon.png");
     -fx-background-size: 110px 100px;
-    -fx-background-color: transparent;
-    -fx-background-position: center 8px;
 }
+
 .button:hover{
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
@@ -42,3 +54,13 @@
     -fx-content-display: LEFT;
     -fx-cursor: hand;
 }
+
+#driverIdCode, #waybillNo, #factoryName,#noOfBins, #fishType{
+    -fx-opacity: 0.6;
+    -fx-prompt-text-fill: black;
+    -fx-text-fill: black;
+    -fx-font-size: 20px;
+}
+
+
+
