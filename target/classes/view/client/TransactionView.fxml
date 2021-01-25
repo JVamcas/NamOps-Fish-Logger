@@ -87,7 +87,7 @@
       <GridPane.margin>
          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </GridPane.margin>
-      <Label alignment="CENTER" prefHeight="38.0" prefWidth="573.0" text="Destination" textFill="#f5f2f2" GridPane.columnSpan="4" GridPane.halignment="CENTER">
+      <Label alignment="CENTER" prefHeight="38.0" prefWidth="573.0" text="Destination" textFill="#f5f2f2" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
          </GridPane.margin>
@@ -158,7 +158,7 @@
          </children>
       </HBox>
    </GridPane>
-   <Label layoutX="20.0" layoutY="270.0" text="Type of Fish" textFill="#eff2ec" GridPane.rowIndex="9">
+   <Label layoutX="20.0" layoutY="270.0" text="Type of Fish" textFill="#eff2ec" GridPane.rowIndex="9" GridPane.valignment="BOTTOM">
       <font>
          <Font name="System Bold" size="24.0" />
       </font>
@@ -188,9 +188,9 @@
          <Insets left="10.0" right="10.0" />
       </GridPane.margin>
    </TextField>
-   <Label fx:id="factoryIcon" layoutX="616.0" layoutY="27.0" prefHeight="59.0" prefWidth="88.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
+   <Label fx:id="factoryIcon" layoutX="616.0" layoutY="27.0" prefHeight="59.0" prefWidth="88.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
    <Label fx:id="driverIdCodeLabel11" layoutX="610.0" layoutY="120.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" />
-   <Label fx:id="waybillIcon" layoutX="610.0" layoutY="120.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
-   <Label fx:id="binIcon" layoutX="610.0" layoutY="192.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.rowIndex="7" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
-   <Label fx:id="fishTypeIcon" layoutX="610.0" layoutY="280.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.rowIndex="9" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
+   <Label fx:id="waybillIcon" layoutX="610.0" layoutY="120.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
+   <Label fx:id="binIcon" layoutX="610.0" layoutY="192.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
+   <Label fx:id="fishTypeIcon" layoutX="610.0" layoutY="280.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
 </GridPane>

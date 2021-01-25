@@ -55,11 +55,12 @@
     -fx-cursor: hand;
 }
 
-#driverIdCode, #waybillNo, #factoryName,#noOfBins, #fishType{
+#iDcode, #waybillNo, #factoryName,#noOfBins, #fishType{
     -fx-opacity: 0.6;
-    -fx-prompt-text-fill: black;
-    -fx-text-fill: black;
-    -fx-font-size: 20px;
+    -fx-prompt-text-fill: #acb0ac;
+    -fx-text-fill: #1c1a1a;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
 }
 
 

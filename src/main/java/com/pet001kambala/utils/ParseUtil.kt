@@ -1,6 +1,7 @@
 package com.pet001kambala.utils
 
 
+import com.pet001kambala.model.BinTransaction
 import javafx.scene.control.TextField
 import tornadofx.*
 import java.lang.Double.parseDouble
@@ -37,6 +38,18 @@ class ParseUtil {
                     } catch (e: Exception) {
                         false
                     }
+        }
+
+        fun BinTransaction?.copy(): BinTransaction {
+
+            return if (this == null) BinTransaction()
+            else
+                BinTransaction().also {
+                    it.driver = driver
+                    it.factory = factory
+                    it.waybillNoProperty.set(waybillNoProperty.get())
+                    it.fish = fish
+                }
         }
 
         fun String?.isValidIdCode(): Boolean {

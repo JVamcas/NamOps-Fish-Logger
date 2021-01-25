@@ -1,5 +1,6 @@
 package com.pet001kambala.model
 
+import com.pet001kambala.utils.ParseUtil.Companion.copy
 import com.pet001kambala.utils.SimpleDateConvertor
 import com.pet001kambala.utils.SimpleStringConvertor
 import javafx.beans.property.SimpleObjectProperty
@@ -50,7 +51,7 @@ import javax.persistence.*
 
     @Column(name = "bin_number")
     @Convert(converter = SimpleStringConvertor::class)
-    val noOfBinsProperty = SimpleStringProperty()
+    val binNoProperty = SimpleStringProperty()
 
     @Column(name = "bin_weight")
     @Convert(converter = SimpleStringConvertor::class)
@@ -75,7 +76,7 @@ import javax.persistence.*
     fun data() = arrayListOf(
         Pair("Date", dateProperty.get()),
         Pair("Waybill", waybillNoProperty.get()),
-        Pair("Bin", noOfBinsProperty.get()),
+        Pair("Bin", binNoProperty.get()),
         Pair("Bin Weight (KG)", binWeightProperty.get()),
         Pair("Pit", pitNoProperty.get()),
         Pair("Type of fish", fish),
@@ -86,12 +87,12 @@ import javax.persistence.*
 
 class BinTransactionModel : ItemViewModel<BinTransaction>() {
 
-    val driver = bind(BinTransaction::driverProperty)
-    val factory = bind(BinTransaction::factoryProperty)
-    val fish = bind(BinTransaction::fishProperty)
+    val driver = bind(BinTransaction::driver)
+    val factory = bind(BinTransaction::factory)
+    val fish = bind(BinTransaction::fish)
 //    val date = bind(BinTransaction::dateProperty)
     val wayBillNo = bind(BinTransaction::waybillNoProperty)
-    val noOfBins = bind(BinTransaction::noOfBinsProperty)
+    val binNo = bind(BinTransaction::binNoProperty)
     val binWeight = bind(BinTransaction::binWeightProperty)
 //    val pitNo = bind(BinTransaction::pitNoProperty)
 
@@ -100,10 +101,7 @@ class BinTransactionModel : ItemViewModel<BinTransaction>() {
     }
 
     fun toNextBin() {
-        item = BinTransaction().also {
-            it.id = null
-            it.pitNoProperty.set(null)
-        }
+        item = item.copy()
     }
     fun resetBinTransaction(){
         item = BinTransaction()

@@ -9,7 +9,6 @@ import com.pet001kambala.repo.DriverRepo
 import com.pet001kambala.repo.FactoryRepo
 import com.pet001kambala.repo.FishRepo
 import com.pet001kambala.utils.DateUtil.Companion.localDateToday
-import com.pet001kambala.utils.ParseUtil.Companion.isNumber
 import com.pet001kambala.utils.ParseUtil.Companion.isValidBinWeight
 import com.pet001kambala.utils.ParseUtil.Companion.isValidIdCode
 import com.pet001kambala.utils.ParseUtil.Companion.isValidWayBill
@@ -33,8 +32,8 @@ class HomeController : AbstractView("") {
     private val idCode: TextField by fxid("iDcode")
     private val pit_1: Button by fxid("pit_1")
     private val pit_2: Button by fxid("pit_2")
-    private val pit_3: Button by fxid("pit_2")
-    private val pit_4: Button by fxid("pit_2")
+    private val pit_3: Button by fxid("pit_3")
+    private val pit_4: Button by fxid("pit_4")
     private val factory: ComboBox<Factory> by fxid("factoryName")
     private val waybillNo: TextField by fxid("waybillNo")
     private val noOfBins: TextField by fxid("noOfBins")
@@ -58,8 +57,8 @@ class HomeController : AbstractView("") {
                         if (results is Results.Success<*>) {
                             val driver = results.data as List<Driver>
                             if (driver.isNotEmpty())
-                                transModel.driver.set(driver.first())
-                            else showError("Invalid code", "No driver found with such a code.")
+                                transModel.driver.value = driver.first()
+                            else showError("Invalid ID Code", "No driver found with that code.")
                         } else parseResults(results)
                     }
                 }
@@ -92,15 +91,17 @@ class HomeController : AbstractView("") {
         }
 
         noOfBins.apply {
-            bind(transModel.noOfBins)
-            validator(ValidationTrigger.OnChange()) {
+            textProperty().addListener { _, oldBinNo, newBinNo ->
 
-                val bins = if (!noOfBins.text.isNullOrEmpty()) noOfBins.text.toInt() else 0
-                pendingBins.text = (bins - binLogged).toString()
+                val bins = if(!newBinNo.isNullOrEmpty()) newBinNo.toInt() else 0
+                when{
+                    bins == 0 ->{
+                        showError(header = "Invalid bins number", msg = "Enter a valid number of bins.")
+                    }
+                    bins <= binLogged -> showError("Invalid bin Number", msg="Value cannot be less than bins already recorded.")
 
-                if (bins >= binLogged)
-                    null
-                else error("Value cannot be less than bins already recorded.")
+                    else -> pendingBins.text = (bins - binLogged).toString()
+                }
             }
         }
 
@@ -175,21 +176,24 @@ class HomeController : AbstractView("") {
         val trans = transModel.item.also {
             it.pitNoProperty.set(pitNo)
             it.dateProperty.set(Timestamp.valueOf(localDateToday()))
+            it.binNoProperty.set((binLogged + 1).toString())
         }
 
         GlobalScope.launch {
             val results = transactionRepo.addNewModel(trans)
             if (results is Results.Success<*>) {
-                transModel.toNextBin()
                 binLogged++
-
-                val pendingBins = noOfBins.text.toInt() - binLogged
-                this@HomeController.pendingBins.text = pendingBins.toString()
-
-                if (pendingBins == 0) {
-                    binLogged = 0
-                    transModel.resetBinTransaction()
+                Platform.runLater {
+                    val pendingBins = noOfBins.text.toInt() - binLogged
+                    this@HomeController.pendingBins.text = pendingBins.toString()
+                    if (pendingBins == 0) {
+                        binLogged = 0
+                        transModel.resetBinTransaction()
+                        idCode.clear()
+                        noOfBins.clear()
+                    }
                 }
+                transModel.toNextBin()
             } else
                 parseResults(results)
         }
