@@ -2,6 +2,9 @@ package com.pet001kambala.utils
 
 
 import com.pet001kambala.model.BinTransaction
+import com.pet001kambala.model.BinTransactionModel
+import com.pet001kambala.model.Factory
+import com.pet001kambala.model.Fish
 import javafx.scene.control.TextField
 import tornadofx.*
 import java.lang.Double.parseDouble
@@ -40,14 +43,20 @@ class ParseUtil {
                     }
         }
 
+        fun String?.strip(): String {
+            return this?.trim() ?: ""
+        }
+
         fun BinTransaction?.copy(): BinTransaction {
 
             return if (this == null) BinTransaction()
             else
                 BinTransaction().also {
+                    it.idCodeProperty.set(idCodeProperty.get())
+                    it.noOfBinsProperty.set(noOfBinsProperty.get())
+                    it.waybillNoProperty.set(waybillNoProperty.get())
                     it.driver = driver
                     it.factory = factory
-                    it.waybillNoProperty.set(waybillNoProperty.get())
                     it.fish = fish
                 }
         }
@@ -61,7 +70,7 @@ class ParseUtil {
         }
 
         fun String?.isValidBinWeight(): Boolean {
-            return this.isNumber() && this?.toFloat() ?: 0f >= 300f
+            return this.isNumber() && this?.toFloat() ?: 0f >= 260f
         }
     }
 }

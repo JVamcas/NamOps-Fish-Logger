@@ -5,13 +5,14 @@ import com.pet001kambala.utils.SimpleDateConvertor
 import com.pet001kambala.utils.SimpleStringConvertor
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import tornadofx.*
 import java.sql.Timestamp
 import javax.persistence.*
 
 @Entity
 @Table(name = "bins_transactions")
- class BinTransaction {
+class BinTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -73,6 +74,12 @@ import javax.persistence.*
         }
         get() = fishProperty.get()
 
+    @Transient
+    val idCodeProperty = SimpleStringProperty()
+
+    @Transient
+    val noOfBinsProperty = SimpleStringProperty()
+
     fun data() = arrayListOf(
         Pair("Date", dateProperty.get()),
         Pair("Waybill", waybillNoProperty.get()),
@@ -90,11 +97,10 @@ class BinTransactionModel : ItemViewModel<BinTransaction>() {
     val driver = bind(BinTransaction::driver)
     val factory = bind(BinTransaction::factory)
     val fish = bind(BinTransaction::fish)
-//    val date = bind(BinTransaction::dateProperty)
+    val noOfBins = bind(BinTransaction::noOfBinsProperty)
+    val idCode = bind(BinTransaction::idCodeProperty)
     val wayBillNo = bind(BinTransaction::waybillNoProperty)
-    val binNo = bind(BinTransaction::binNoProperty)
     val binWeight = bind(BinTransaction::binWeightProperty)
-//    val pitNo = bind(BinTransaction::pitNoProperty)
 
     init {
         item = BinTransaction()
@@ -103,7 +109,13 @@ class BinTransactionModel : ItemViewModel<BinTransaction>() {
     fun toNextBin() {
         item = item.copy()
     }
-    fun resetBinTransaction(){
-        item = BinTransaction()
+
+    fun reset(defaultFact: Factory, defaultFish: Fish) {
+        item = BinTransaction().apply {
+            factory = defaultFact
+            fish = defaultFish
+        }
     }
 }
+
+class TextModel(val property: StringProperty): ItemViewModel<String>()

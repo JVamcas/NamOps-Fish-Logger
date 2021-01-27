@@ -1,9 +1,7 @@
 package com.pet001kambala.controller
 
-import com.pet001kambala.model.BinTransactionModel
-import com.pet001kambala.model.Driver
-import com.pet001kambala.model.Factory
-import com.pet001kambala.model.Fish
+import com.pet001kambala.keypad.KeyboardController
+import com.pet001kambala.model.*
 import com.pet001kambala.repo.BinTransactionRepo
 import com.pet001kambala.repo.DriverRepo
 import com.pet001kambala.repo.FactoryRepo
@@ -12,8 +10,11 @@ import com.pet001kambala.utils.DateUtil.Companion.localDateToday
 import com.pet001kambala.utils.ParseUtil.Companion.isValidBinWeight
 import com.pet001kambala.utils.ParseUtil.Companion.isValidIdCode
 import com.pet001kambala.utils.ParseUtil.Companion.isValidWayBill
+import com.pet001kambala.utils.ParseUtil.Companion.strip
 import com.pet001kambala.utils.Results
 import javafx.application.Platform
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.scene.control.Button
@@ -26,6 +27,7 @@ import kotlinx.coroutines.GlobalScope
 import tornadofx.*
 import java.sql.Timestamp
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 
 class HomeController : AbstractView("") {
 
@@ -40,7 +42,7 @@ class HomeController : AbstractView("") {
     private val fishType: ComboBox<Fish> by fxid("fishType")
     private val binWeight: TextField by fxid("binWeight")
     private val pendingBins: Label by fxid("pendingBins")
-
+    private val historyBtn: Button by fxid("historyBtn")
 
     override val root: GridPane by fxml("/view/client/TransactionView.fxml")
     private val transactionRepo = BinTransactionRepo()
@@ -49,21 +51,46 @@ class HomeController : AbstractView("") {
 
     init {
         transModel.item
+
+        val validDriver = AtomicBoolean(false);
         idCode.apply {
+            bind(transModel.idCode)
+            validator(ValidationTrigger.OnChange()) {
+                if (validDriver.get())
+                    null
+                else error("No driver exist with that code.")
+            }
+
+            setOnMouseClicked {
+                showKeyPad(textProperty())
+            }
+
             textProperty().addListener { _, oldCode, newIdCode ->
-                if (oldCode != newIdCode && newIdCode.isValidIdCode()) {
+                if (oldCode.strip() != newIdCode.strip() && newIdCode.strip().isValidIdCode()) {
                     GlobalScope.launch {
                         val results = DriverRepo().findDriver(newIdCode)
-                        if (results is Results.Success<*>) {
-                            val driver = results.data as List<Driver>
-                            if (driver.isNotEmpty())
-                                transModel.driver.value = driver.first()
-                            else showError("Invalid ID Code", "No driver found with that code.")
-                        } else parseResults(results)
+                        Platform.runLater {
+                            var driver: Driver? = null
+                            if (results is Results.Success<*>) {
+                                val driverList = results.data as List<Driver>
+                                if (driverList.isNotEmpty()) {
+                                    validDriver.set(true)
+                                    driver = driverList.firstOrNull()
+                                    transModel.driver.value = driver
+                                } else validDriver.set(false)
+                            } else {
+                                validDriver.set(false)
+                                parseResults(results)
+                            }
+
+                            idCode.text = driver?.toString() ?: "$newIdCode "// trigger validation of driver Id code
+                            idCode.positionCaret(idCode.text.length)
+                        }
                     }
                 }
             }
         }
+
 
         factory.apply {
             bind(transModel.factory)
@@ -88,20 +115,26 @@ class HomeController : AbstractView("") {
                     null
                 else error("Waybill number should be 5 characters long.")
             }
+            setOnMouseClicked {
+                showKeyPad(textProperty())
+            }
         }
 
         noOfBins.apply {
-            textProperty().addListener { _, oldBinNo, newBinNo ->
-
-                val bins = if(!newBinNo.isNullOrEmpty()) newBinNo.toInt() else 0
-                when{
-                    bins == 0 ->{
-                        showError(header = "Invalid bins number", msg = "Enter a valid number of bins.")
+            bind(transModel.noOfBins)
+            validator(ValidationTrigger.OnChange()) {
+                val bins = if (!it.isNullOrEmpty()) it.toInt() else 0
+                when {
+                    bins < binLogged -> error("Value cannot be less than bins already recorded.")
+                    bins == 0 -> error("Enter a valid number of bins.")
+                    else -> {
+                        pendingBins.text = (bins - binLogged).toString()
+                        null
                     }
-                    bins <= binLogged -> showError("Invalid bin Number", msg="Value cannot be less than bins already recorded.")
-
-                    else -> pendingBins.text = (bins - binLogged).toString()
                 }
+            }
+            setOnMouseClicked {
+                showKeyPad(textProperty())
             }
         }
 
@@ -125,7 +158,10 @@ class HomeController : AbstractView("") {
                 val text = binWeight.text
                 if (text.isValidBinWeight())
                     null
-                else error("Bin weight must be greater than or equal to 280KG.")
+                else error("Bin weight must be greater than or equal to 260KG.")
+            }
+            setOnMouseClicked {
+                showKeyPad(textProperty())
             }
         }
 
@@ -169,6 +205,23 @@ class HomeController : AbstractView("") {
                 }
             }
         }
+
+        historyBtn.apply {
+            action {
+                val waybill = waybillNo.text
+                if (!waybill.isNullOrEmpty()) {
+                    setInScope(transModel, scope)
+                    find(CurrentTransactionTableController::class, scope).openModal()
+                }
+            }
+        }
+    }
+
+    private fun showKeyPad(property: StringProperty) {
+        val scope = Scope()
+        val model = TextModel(property)
+        setInScope(model, scope)
+        find(KeyboardController::class, scope).openModal()
     }
 
     private fun saveTransaction(pitNo: String) {
@@ -188,7 +241,7 @@ class HomeController : AbstractView("") {
                     this@HomeController.pendingBins.text = pendingBins.toString()
                     if (pendingBins == 0) {
                         binLogged = 0
-                        transModel.resetBinTransaction()
+                        transModel.reset(factory.items.first(), fishType.items.first())
                         idCode.clear()
                         noOfBins.clear()
                     }
@@ -198,7 +251,6 @@ class HomeController : AbstractView("") {
                 parseResults(results)
         }
     }
-
 
     override fun onDock() {
         super.onDock()

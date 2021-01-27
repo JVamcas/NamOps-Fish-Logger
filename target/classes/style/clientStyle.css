@@ -63,5 +63,11 @@
     -fx-font-weight: bold;
 }
 
+#historyBtn{
+    -fx-background-image: url("images/client/binIcon.png");
+    -fx-background-size: 70px 50px;
+    -fx-background-repeat: no-repeat;
+}
+
 
 
