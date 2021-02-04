@@ -208,11 +208,11 @@ class HomeController : AbstractView("") {
 
         historyBtn.apply {
             action {
-                val waybill = waybillNo.text
-                if (!waybill.isNullOrEmpty()) {
+//                val waybill = waybillNo.text
+//                if (!waybill.isNullOrEmpty()) {
                     setInScope(transModel, scope)
                     find(CurrentTransactionTableController::class, scope).openModal()
-                }
+//                }
             }
         }
     }
