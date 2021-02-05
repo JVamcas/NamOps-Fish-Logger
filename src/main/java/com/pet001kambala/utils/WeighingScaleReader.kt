@@ -1,10 +1,10 @@
 package com.pet001kambala.utils
 
-import com.fazecast.jSerialComm.SerialPort
-import com.fazecast.jSerialComm.SerialPortEvent
-import com.fazecast.jSerialComm.SerialPortPacketListener
+import com.fazecast.jSerialComm.*
 import com.pet001kambala.utils.ParseUtil.Companion.isNumber
+import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
+import kotlinx.coroutines.sync.Semaphore
 import java.nio.charset.Charset
 import java.util.regex.Pattern
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 class WeighingScaleReader(private val property: SimpleStringProperty) {
 
     private val comPort: SerialPort = SerialPort.getCommPort("COM3")
-    private val pattern: Pattern = Pattern.compile(".*\\+(.+)?(\\d+).*kg")
+    private val pattern: Pattern = Pattern.compile("\\+(\\d+)")
 
     init {
 
@@ -22,34 +22,32 @@ class WeighingScaleReader(private val property: SimpleStringProperty) {
         /**Need to get this right as your scale might be very slow*/
         comPort.parity = SerialPort.NO_PARITY
         comPort.numStopBits = SerialPort.ONE_STOP_BIT
-        comPort.numDataBits = 7 /*7*/
+        comPort.numDataBits = 7
     }
 
     fun read() {
-        comPort.openPort()
-        comPort.addDataListener(object : SerialPortPacketListener {
+        comPort.addDataListener(object : SerialPortMessageListener {
             override fun getListeningEvents() = SerialPort.LISTENING_EVENT_DATA_RECEIVED
 
-            override fun serialEvent(event: SerialPortEvent) {
-                try{
-                    val newData = String(event.receivedData, Charset.forName("UTF-8"))
-
-                    println("Data: $newData")
-
-                    val matcher = pattern.matcher(newData)
-                    if (matcher.matches()) {
-                        val weight = if (!matcher.group(2).isNumber()) 0 else matcher.group(2).toInt()
-                        property.set(weight.toString())
+            override fun serialEvent(p0: SerialPortEvent) {
+                if (p0.eventType == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
+                    val data = p0.receivedData
+                    if (data.size == 17) {
+                        val weightArray = data.copyOfRange(2, 8)
+                        val weight = String(weightArray, Charset.forName("UTF-8")).toInt()
+                        Platform.runLater { property.set("$weight KG") }
                     }
-                }
-                catch (e: Exception){
-                    e.printStackTrace()
                 }
             }
 
-            override fun getPacketSize() = 17
+            override fun getMessageDelimiter() = byteArrayOf(0x0d)
+
+            override fun delimiterIndicatesEndOfMessage() = true
+
 
         })
+        comPort.openPort()
+
     }
 }
 
