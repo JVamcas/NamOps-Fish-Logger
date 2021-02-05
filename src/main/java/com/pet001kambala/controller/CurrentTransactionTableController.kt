@@ -28,14 +28,24 @@ class CurrentTransactionTableController : AbstractModelTableController<BinTransa
 
                 column("Date", BinTransaction::dateProperty).apply {
                     style = "-fx-alignment: CENTER;"
-                    contentWidth(padding = 10.0, useAsMin = true)
+                    contentWidth(padding = 5.0, useAsMin = true)
                 }
-                column("Waybill", BinTransaction::waybillNoProperty).apply { style = "-fx-alignment: CENTER;" }
-                column("Bin", BinTransaction::binNoProperty).apply { style = "-fx-alignment: CENTER;" }
-                column("Pit", BinTransaction::pitNoProperty).apply { style = "-fx-alignment: CENTER;" }
+                column("Waybill", BinTransaction::waybillNoProperty).apply {
+                    style = "-fx-alignment: CENTER;"
+                    contentWidth(padding = 5.0, useAsMin = true)
+                }
+                column("Bin", BinTransaction::binNoProperty).apply {
+                    style = "-fx-alignment: CENTER;"
+                    contentWidth(padding = 5.0, useAsMin = true)
+                }
+                column("Pit", BinTransaction::pitNoProperty).apply {
+                    style = "-fx-alignment: CENTER;"
+                    contentWidth(padding = 5.0, useAsMin = true)
+                }
                 column("Bin weight (KG)", BinTransaction::binWeightProperty).apply {
                     style = "-fx-alignment: CENTER;"
                     remainingWidth()
+                    contentWidth(padding = 5.0, useAsMin = true)
                 }
 
                 placeholder = Label("There are no bins on that waybill yet.")

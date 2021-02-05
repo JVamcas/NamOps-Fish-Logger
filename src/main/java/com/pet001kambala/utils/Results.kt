@@ -1,5 +1,9 @@
 package com.pet001kambala.utils
 
+import com.mysql.cj.protocol.SocketConnection
+import java.net.ConnectException
+import java.net.SocketException
+
 
 sealed class Results {
 
@@ -27,6 +31,7 @@ sealed class Results {
             ODOMETER_LESS_PREVIOUS,
             INSUFFICIENT_FUEL,
             DUPLICATE_WAYBILL,
+            NO_CONNECTION,
             UNKNOWN
         }
 
@@ -35,7 +40,12 @@ sealed class Results {
             is InvalidOdoMeterException -> CODE.ODOMETER_LESS_PREVIOUS
             is InsufficientFuelException -> CODE.INSUFFICIENT_FUEL
             is DuplicateWaybillException -> CODE.DUPLICATE_WAYBILL
-            else -> CODE.UNKNOWN
+            is SocketException -> CODE.NO_CONNECTION
+            is ConnectException -> CODE.NO_CONNECTION
+            else -> {
+                println("Error message was ${e.printStackTrace()}")
+                CODE.UNKNOWN
+            }
         }
 
         class DuplicateVehicleException : Exception()

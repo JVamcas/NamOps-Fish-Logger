@@ -14,15 +14,6 @@ class ParseUtil {
 
     companion object {
 
-        fun String?.isValidPlateNo(): Boolean {
-            val pattern = Pattern.compile("^N\\d+[A-Z]+$")
-            return !this.isNullOrEmpty() && pattern.matcher(this).matches()
-        }
-
-        fun String?.isValidVehicleNo(): Boolean {
-            val pattern = Pattern.compile("^[HGL]\\d{2,}$")
-            return !this.isNullOrEmpty() && pattern.matcher(this).matches()
-        }
 
         fun String?.isValidPassword() = this != null && this.length >= 4
 

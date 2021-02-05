@@ -59,6 +59,13 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
                         msg = "Insufficient fuel. Fill up tank or select smaller quantity."
                     )
                 }
+
+                Results.Error.CODE.NO_CONNECTION -> {
+                    showError(
+                        header = "No Connection",
+                        msg = "Computer appears to be offline. Please refresh your connections."
+                    )
+                }
             }
         }
     }

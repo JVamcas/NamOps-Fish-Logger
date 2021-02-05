@@ -12,6 +12,7 @@ import com.pet001kambala.utils.ParseUtil.Companion.isValidIdCode
 import com.pet001kambala.utils.ParseUtil.Companion.isValidWayBill
 import com.pet001kambala.utils.ParseUtil.Companion.strip
 import com.pet001kambala.utils.Results
+import com.pet001kambala.utils.WeighingScaleReader
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
@@ -163,6 +164,8 @@ class HomeController : AbstractView("") {
             setOnMouseClicked {
                 showKeyPad(textProperty())
             }
+            //automatically read weight from the scale
+            WeighingScaleReader(transModel.binWeight).read()
         }
 
         pit_1.apply {
