@@ -54,7 +54,7 @@
     -fx-cursor: hand;
 }
 
-#iDcode, #waybillNo, #factoryName,#noOfBins, #fishType{
+#iDcode, #waybillNo, #factoryName,#noOfBins, #fishType, #driversCombo{
     -fx-opacity: 0.6;
     -fx-prompt-text-fill: #acb0ac;
     -fx-text-fill: #1c1a1a;

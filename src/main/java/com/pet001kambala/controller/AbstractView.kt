@@ -37,29 +37,12 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
         } else if (results is Results.Error) {
 
             when (results.code) {
-                Results.Error.CODE.DUPLICATE_VEHICLE -> {
-                    showError(
-                        header = "Duplicate Vehicles",
-                        msg = "A vehicle is already registered under that plate/ unit number, or both."
-                    )
-                }
-                Results.Error.CODE.ODOMETER_LESS_PREVIOUS -> {
-                    showError(
-                        header = "Invalid vehicle odometer.",
-                        msg = "The current odometer reading cannot be less than the previous reading."
-                    )
-                }
+
                 Results.Error.CODE.UNKNOWN -> {
                     showError(
                         header = "Unknown Error", msg = "An unknown error has occurred. \nWhat to do:\n" +
                                 "1.  Restart the program.\n" +
                                 "2. If the error persists, please contact the system administrator at NamOps Logistics Pty Ltd."
-                    )
-                }
-                Results.Error.CODE.INSUFFICIENT_FUEL -> {
-                    showError(
-                        header = "Insufficient Fuel",
-                        msg = "Insufficient fuel. Fill up tank or select smaller quantity."
                     )
                 }
 

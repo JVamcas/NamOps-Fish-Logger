@@ -45,6 +45,7 @@ class HomeController : AbstractView("") {
     private val historyBtn: Button by fxid("historyBtn")
     private val autoWeight: Button by fxid("autoWeight")
     private val manualWeight: Button by fxid("manualWeight")
+    private val driversCombo: ComboBox<Driver> by fxid("driversCombo")
 
     override val root: GridPane by fxml("/view/client/HomeView.fxml")
     private val transactionRepo = BinTransactionRepo()
@@ -52,13 +53,17 @@ class HomeController : AbstractView("") {
     private var binLogged = 0
     private var scaleReader: WeighingScaleReader
 
+    private val validDriver = AtomicBoolean(false)
+    lateinit var keypad: KeyboardController
+
     init {
         transModel.item
 
         binWeight.isDisable = true //prevent weight being edited in auto
 
-        val validDriver = AtomicBoolean(false);
         idCode.apply {
+            driversCombo.isVisible = false
+
             bind(transModel.idCode)
             validator(ValidationTrigger.OnChange()) {
                 if (validDriver.get())
@@ -71,6 +76,7 @@ class HomeController : AbstractView("") {
             }
 
             textProperty().addListener { _, oldCode, newIdCode ->
+
                 if (oldCode.strip() != newIdCode.strip() && newIdCode.strip().isValidIdCode()) {
                     GlobalScope.launch {
                         val results = DriverRepo().findDriver(newIdCode)
@@ -80,8 +86,15 @@ class HomeController : AbstractView("") {
                                 val driverList = results.data as List<Driver>
                                 if (driverList.isNotEmpty()) {
                                     validDriver.set(true)
-                                    driver = driverList.firstOrNull()
-                                    transModel.driver.value = driver
+                                    closeKeyPad()
+
+                                    idCode.isVisible = false
+                                    driversCombo.isVisible = true
+                                    driversCombo.items = driverList.asObservable()
+                                    driversCombo.show()
+
+//                                    driver = driverList.firstOrNull()
+//                                    transModel.driver.value = driver
                                 } else validDriver.set(false)
                             } else {
                                 validDriver.set(false)
@@ -92,6 +105,17 @@ class HomeController : AbstractView("") {
                             idCode.positionCaret(idCode.text.length)
                         }
                     }
+                }
+            }
+        }
+
+        driversCombo.apply {
+            setOnAction {
+                selectionModel.selectedItem?.apply {
+                    transModel.driver.value = this
+                    idCode.text = this.toString()
+                    driversCombo.isVisible = false
+                    idCode.isVisible = true
                 }
             }
         }
@@ -246,7 +270,7 @@ class HomeController : AbstractView("") {
         val scope = Scope()
         val model = TextModel(property)
         setInScope(model, scope)
-        find(KeyboardController::class, scope).openModal()
+        keypad = find(KeyboardController::class, scope).also { it.openModal() }
     }
 
     private fun saveTransaction(pitNo: String) {
@@ -268,6 +292,7 @@ class HomeController : AbstractView("") {
                         binLogged = 0
                         transModel.reset(factory.items.first(), fishType.items.first())
                         idCode.clear()
+                        validDriver.set(false)
                         noOfBins.clear()
                     }
                 }
@@ -275,6 +300,10 @@ class HomeController : AbstractView("") {
             } else
                 parseResults(results)
         }
+    }
+
+    private fun closeKeyPad() {
+        keypad.closeView()
     }
 
     override fun onDock() {

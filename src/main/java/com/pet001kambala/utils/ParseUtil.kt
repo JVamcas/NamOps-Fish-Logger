@@ -53,7 +53,7 @@ class ParseUtil {
         }
 
         fun String?.isValidIdCode(): Boolean {
-            return this.isNumber() && this?.length ?: 0 >= 4
+            return this.isNumber() && this?.length ?: 0 >= 3
         }
 
         fun String?.isValidWayBill(): Boolean {

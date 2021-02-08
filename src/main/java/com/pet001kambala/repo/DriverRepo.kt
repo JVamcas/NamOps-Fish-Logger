@@ -14,7 +14,7 @@ class DriverRepo : AbstractRepo<Driver>() {
         return try {
             withContext(Dispatchers.Default) {
                 session = sessionFactory!!.openSession()
-                val strqry = "SELECT * FROM drivers where driver_code=:code"
+                val strqry = "SELECT * FROM drivers where driver_code=:code AND deleted=false"
                 val data = session!!.createNativeQuery(strqry, Driver::class.java)
                     .setParameter("code", code)
                     .resultList.filterNotNull()

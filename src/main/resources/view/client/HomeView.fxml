@@ -221,4 +221,9 @@
    <Label fx:id="waybillIcon" layoutX="610.0" layoutY="120.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
    <Label fx:id="binIcon" layoutX="610.0" layoutY="192.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
    <Label fx:id="fishTypeIcon" layoutX="610.0" layoutY="280.0" prefHeight="59.0" prefWidth="88.0" style="-fx-background-size: 100;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.rowSpan="2" GridPane.valignment="BOTTOM" />
+   <ComboBox fx:id="driversCombo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="580.0" style="-fx-background-radius: 20;" GridPane.rowIndex="2">
+      <GridPane.margin>
+         <Insets left="10.0" />
+      </GridPane.margin>
+   </ComboBox>
 </GridPane>
