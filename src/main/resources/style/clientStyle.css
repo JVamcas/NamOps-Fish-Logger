@@ -1,4 +1,3 @@
-
 #driverIcon, #factoryIcon, #waybillIcon, #fishTypeIcon, #binIcon{
     -fx-background-size: 80px 70px;
     -fx-background-repeat: no-repeat;
@@ -67,7 +66,27 @@
     -fx-background-image: url("images/client/binIcon.png");
     -fx-background-size: 70px 50px;
     -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
 }
+
+#autoWeight, #manualWeight{
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+
+}
+
+#autoWeight{
+    -fx-background-color: #47a947;
+    -fx-background-size: 50px 40px;
+    -fx-background-radius: 10px 0px 0px 10px;
+}
+
+#manualWeight{
+    -fx-background-color: #ef2f2f;
+    -fx-background-size: 100px 40px;
+    -fx-background-radius: 0px 10px 10px 0px;
+}
+
 
 
 

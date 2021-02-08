@@ -1,18 +1,16 @@
 package com.pet001kambala.utils
 
 import com.fazecast.jSerialComm.*
-import com.pet001kambala.utils.ParseUtil.Companion.isNumber
+import com.pet001kambala.controller.AbstractView
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
-import kotlinx.coroutines.sync.Semaphore
+import java.lang.Exception
 import java.nio.charset.Charset
-import java.util.regex.Pattern
 
 
 class WeighingScaleReader(private val property: SimpleStringProperty) {
 
     private val comPort: SerialPort = SerialPort.getCommPort("COM3")
-    private val pattern: Pattern = Pattern.compile("\\+(\\d+)")
 
     init {
 
@@ -26,7 +24,7 @@ class WeighingScaleReader(private val property: SimpleStringProperty) {
     }
 
     fun read() {
-        comPort.addDataListener(object : SerialPortMessageListener {
+        comPort.addDataListener(object : SerialPortMessageListenerWithExceptions {
             override fun getListeningEvents() = SerialPort.LISTENING_EVENT_DATA_RECEIVED
 
             override fun serialEvent(p0: SerialPortEvent) {
@@ -44,10 +42,21 @@ class WeighingScaleReader(private val property: SimpleStringProperty) {
 
             override fun delimiterIndicatesEndOfMessage() = true
 
-
+            override fun catchException(p0: Exception) {
+                stopRead()
+                AbstractView.Error.showError(header = "Scale Error.", msg = "Unable to read from scale.")
+            }
         })
         comPort.openPort()
 
+    }
+
+    fun stopRead() {
+        try {
+            comPort.closePort()
+            comPort.removeDataListener()
+        } catch (e: Exception) {
+        }
     }
 }
 

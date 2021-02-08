@@ -4,6 +4,7 @@ import com.pet001kambala.model.BinTransaction
 import com.pet001kambala.model.BinTransactionModel
 import com.pet001kambala.repo.BinTransactionRepo
 import com.pet001kambala.utils.Results
+import com.pet001kambala.utils.SessionManager
 import javafx.collections.ObservableList
 import javafx.scene.control.Label
 import javafx.scene.control.TableView
@@ -12,8 +13,6 @@ import javafx.stage.StageStyle
 import tornadofx.*
 
 class CurrentTransactionTableController : AbstractModelTableController<BinTransaction>("") {
-
-    private val transModel: BinTransactionModel by inject()
 
     override val root = vbox {
         scrollpane {
@@ -44,8 +43,8 @@ class CurrentTransactionTableController : AbstractModelTableController<BinTransa
                 }
                 column("Bin weight (KG)", BinTransaction::binWeightProperty).apply {
                     style = "-fx-alignment: CENTER;"
-                    remainingWidth()
                     contentWidth(padding = 5.0, useAsMin = true)
+                    remainingWidth()
                 }
 
                 placeholder = Label("There are no bins on that waybill yet.")

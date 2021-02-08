@@ -14,7 +14,6 @@ import com.pet001kambala.utils.ParseUtil.Companion.strip
 import com.pet001kambala.utils.Results
 import com.pet001kambala.utils.WeighingScaleReader
 import javafx.application.Platform
-import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.ObservableList
 import javafx.event.EventHandler
@@ -44,14 +43,19 @@ class HomeController : AbstractView("") {
     private val binWeight: TextField by fxid("binWeight")
     private val pendingBins: Label by fxid("pendingBins")
     private val historyBtn: Button by fxid("historyBtn")
+    private val autoWeight: Button by fxid("autoWeight")
+    private val manualWeight: Button by fxid("manualWeight")
 
-    override val root: GridPane by fxml("/view/client/TransactionView.fxml")
+    override val root: GridPane by fxml("/view/client/HomeView.fxml")
     private val transactionRepo = BinTransactionRepo()
     private val transModel = BinTransactionModel()
     private var binLogged = 0
+    private var scaleReader: WeighingScaleReader
 
     init {
         transModel.item
+
+        binWeight.isDisable = true //prevent weight being edited in auto
 
         val validDriver = AtomicBoolean(false);
         idCode.apply {
@@ -165,7 +169,28 @@ class HomeController : AbstractView("") {
                 showKeyPad(textProperty())
             }
             //automatically read weight from the scale
-            WeighingScaleReader(transModel.binWeight).read()
+            scaleReader = WeighingScaleReader(transModel.binWeight)
+            scaleReader.read()
+        }
+
+        autoWeight.apply {
+            action {
+                scaleReader.stopRead() //1. clear up previous instance of scale reader
+                scaleReader = WeighingScaleReader(transModel.binWeight) //2. init new scale
+                scaleReader.read()
+
+                binWeight.isDisable = true //prevent weight being edited in auto
+                style = "-fx-background-color: #47a947;"
+                manualWeight.style = "-fx-background-color: #ef2f2f;"
+            }
+        }
+        manualWeight.apply {
+            action {
+                scaleReader.stopRead()
+                binWeight.isDisable = false
+                style = "-fx-background-color: #47a947;"
+                autoWeight.style = "-fx-background-color: #ef2f2f;"
+            }
         }
 
         pit_1.apply {
@@ -211,11 +236,8 @@ class HomeController : AbstractView("") {
 
         historyBtn.apply {
             action {
-//                val waybill = waybillNo.text
-//                if (!waybill.isNullOrEmpty()) {
-                    setInScope(transModel, scope)
-                    find(CurrentTransactionTableController::class, scope).openModal()
-//                }
+                setInScope(transModel, scope)
+                find(CurrentTransactionTableController::class, scope).openModal()
             }
         }
     }
@@ -260,4 +282,5 @@ class HomeController : AbstractView("") {
         workspace.header.hide()
         currentStage?.isMaximized = true
     }
+
 }

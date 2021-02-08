@@ -1,5 +1,6 @@
 package com.pet001kambala.controller
 
+import com.pet001kambala.controller.AbstractView.Error.showError
 import com.pet001kambala.utils.Results
 import javafx.application.Platform
 import javafx.beans.property.Property
@@ -16,17 +17,19 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
         }
     }
 
-
-    fun showError(header: String, msg: String) {
-        Platform.runLater {
-            Alert(Alert.AlertType.ERROR).apply {
-                title = "Error"
-                headerText = header
-                contentText = msg
-                showAndWait()
+    object Error {
+        fun showError(header: String, msg: String) {
+            Platform.runLater {
+                Alert(Alert.AlertType.ERROR).apply {
+                    title = "Error"
+                    headerText = header
+                    contentText = msg
+                    showAndWait()
+                }
             }
         }
     }
+
 
     fun parseResults(results: Results) {
         if (results is Results.Success<*>) {
