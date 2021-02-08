@@ -28,7 +28,6 @@ class BinTransaction {
             field = value
             driverProperty.set(value)
         }
-        get() = driverProperty.get()
 
     @Transient
     val factoryProperty = SimpleObjectProperty<Factory>()
@@ -40,7 +39,6 @@ class BinTransaction {
             field = value
             factoryProperty.set(value)
         }
-        get() = factoryProperty.get()
 
     @Column(name = "transaction_date", nullable = false)
     @Convert(converter = SimpleDateConvertor::class)
@@ -72,7 +70,6 @@ class BinTransaction {
             field = value
             fishProperty.set(value)
         }
-        get() = fishProperty.get()
 
     @Transient
     val idCodeProperty = SimpleStringProperty()

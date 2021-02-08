@@ -44,6 +44,9 @@ class CurrentTransactionTableController : AbstractModelTableController<BinTransa
                 column("Bin weight (KG)", BinTransaction::binWeightProperty).apply {
                     style = "-fx-alignment: CENTER;"
                     contentWidth(padding = 5.0, useAsMin = true)
+                }
+                column("Factory", BinTransaction::factory).apply {
+                    contentWidth(padding = 5.0, useAsMin = true)
                     remainingWidth()
                 }
 
