@@ -60,9 +60,9 @@ class HomeController : AbstractView("") {
         transModel.item
 
         binWeight.isDisable = true //prevent weight being edited in auto
+        driversCombo.isVisible = false //initially hide drivers combo
 
         idCode.apply {
-            driversCombo.isVisible = false
 
             bind(transModel.idCode)
             validator(ValidationTrigger.OnChange()) {
@@ -88,13 +88,13 @@ class HomeController : AbstractView("") {
                                     validDriver.set(true)
                                     closeKeyPad()
 
-                                    idCode.isVisible = false
-                                    driversCombo.isVisible = true
-                                    driversCombo.items = driverList.asObservable()
-                                    driversCombo.show()
+//                                    idCode.isVisible = false
+//                                    driversCombo.isVisible = true
+//                                    driversCombo.items = driverList.asObservable()
+//                                    driversCombo.show()
 
-//                                    driver = driverList.firstOrNull()
-//                                    transModel.driver.value = driver
+                                    driver = driverList.firstOrNull()
+                                    transModel.driver.value = driver
                                 } else validDriver.set(false)
                             } else {
                                 validDriver.set(false)
@@ -109,16 +109,16 @@ class HomeController : AbstractView("") {
             }
         }
 
-        driversCombo.apply {
-            setOnAction {
-                selectionModel.selectedItem?.apply {
-                    transModel.driver.value = this
-                    idCode.text = this.toString()
-                    driversCombo.isVisible = false
-                    idCode.isVisible = true
-                }
-            }
-        }
+//        driversCombo.apply {
+//            setOnAction {
+//                selectionModel.selectedItem?.apply {
+//                    transModel.driver.value = this
+//                    idCode.text = this.toString()
+//                    driversCombo.isVisible = false
+//                    idCode.isVisible = true
+//                }
+//            }
+//        }
 
 
         factory.apply {
