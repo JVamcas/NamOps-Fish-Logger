@@ -32,9 +32,6 @@ class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
     private lateinit var pane: StackPane
     private var size = 0.0
 
-
-    //    private var width = 0.0
-//    private var height = 0.0
     private var keyText: String? = null
     private var _metaData: KeyCode? = null
     private var metaData: ObjectProperty<KeyCode>? = null
@@ -95,8 +92,8 @@ class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
     }
 
     private fun registerListeners() {
-        widthProperty().addListener { o: Observable? -> resize() }
-        heightProperty().addListener { o: Observable? -> resize() }
+        widthProperty().addListener { _: Observable? -> resize() }
+        heightProperty().addListener { _: Observable? -> resize() }
         if (Platform.isSupported(ConditionalFeature.INPUT_MULTITOUCH)) {
             addEventHandler(TouchEvent.TOUCH_PRESSED, touchHandler)
             addEventHandler(TouchEvent.TOUCH_RELEASED, touchHandler)
@@ -124,28 +121,12 @@ class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
         return MAXIMUM_HEIGHT
     }
 
-    fun getKeyText(): String {
+    private fun getKeyText(): String {
         return text.text
-    }
-
-    fun setText(text: String?) {
-        this.text.text = text
     }
 
     fun textProperty(): StringProperty {
         return text.textProperty()
-    }
-
-    fun getMetaData(): KeyCode? {
-        return if (null == metaData) _metaData else metaData!!.get()
-    }
-
-    fun setMetaData(metaData: KeyCode) {
-        if (null == this.metaData) {
-            _metaData = metaData
-        } else {
-            this.metaData!!.set(metaData)
-        }
     }
 
     fun metaDataProperty(): ObjectProperty<KeyCode>? {
@@ -215,7 +196,6 @@ class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
                 )
             }
     }
-
 
     // ******************** Resizing ******************************************
     private fun resize() {

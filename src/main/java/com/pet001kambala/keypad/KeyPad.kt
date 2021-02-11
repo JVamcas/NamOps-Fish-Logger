@@ -19,8 +19,6 @@ class KeyPad(horizontalGap: Double = 5.0, verticalGap: Double = 5.0) : Region() 
     private val MAXIMUM_HEIGHT = 1024.0
     private var userAgentStyleSheet: String? = null
 
-    //    private var width = 0.0
-//    private var height = 0.0
     private var horizontalGap = 0.0
     private var verticalGap = 0.0
     private lateinit var key0: Key
@@ -152,40 +150,6 @@ class KeyPad(horizontalGap: Double = 5.0, verticalGap: Double = 5.0) : Region() 
 
     fun setOnKeyPressed(observer: KeyEventObserver) {
         keys.forEach(Consumer { key: Key -> key.setOnKeyPressed(observer) })
-    }
-
-    fun removeOnKeyPressed(observer: KeyEventObserver) {
-        keys.forEach(Consumer { key: Key -> key.removeOnKeyPressed(observer) })
-    }
-
-    fun setOnKeyReleased(observer: KeyEventObserver) {
-        keys.forEach(Consumer { key: Key -> key.setOnKeyReleased(observer) })
-    }
-
-    fun removeOnKeyReleased(observer: KeyEventObserver) {
-        keys.forEach(Consumer { key: Key -> key.removeOnKeyReleased(observer) })
-    }
-
-    fun getHorizontalGap(): Double {
-        return horizontalGap
-    }
-
-    fun setHorizontalGap(horizontalGap: Double) {
-        this.horizontalGap = horizontalGap
-        pane.hgap = horizontalGap
-    }
-
-    fun getVerticalGap(): Double {
-        return verticalGap
-    }
-
-    fun setVerticalGap(verticalGap: Double) {
-        this.verticalGap = verticalGap
-        pane.vgap = verticalGap
-    }
-
-    private fun createKey(text: String): Key {
-        return createKey(text, "number-pad", null)
     }
 
     private fun createKey(text: String, metaData: KeyCode?): Key {

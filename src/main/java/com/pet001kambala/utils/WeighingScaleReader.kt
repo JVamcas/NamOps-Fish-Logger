@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty
 import java.lang.Exception
 import java.nio.charset.Charset
 
-
 class WeighingScaleReader(private val property: SimpleStringProperty) {
 
     private val comPort: SerialPort = SerialPort.getCommPort("COM3")

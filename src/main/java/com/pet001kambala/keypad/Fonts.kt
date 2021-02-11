@@ -18,8 +18,6 @@ object Fonts {
         }
     }
 
-
-    // ******************** Methods *******************************************
     fun robotoMonoRegular(SIZE: Double): Font {
         return Font(ROBOTO_MONO_REGULAR_NAME, SIZE)
     }

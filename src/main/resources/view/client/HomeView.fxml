@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane id="GridPane" fx:id="scaleToggle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="800.0" style="-fx-background-color: #34495E; -fx-background-radius: 20; -fx-border-radius: 20;" styleClass="bodybg" stylesheets="@../../style/clientStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane id="GridPane" fx:id="scaleToggle" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="800.0" style="-fx-background-color: #34495E; -fx-background-radius: 20; -fx-border-radius: 20;" styleClass="bodybg" stylesheets="@../../style/clientStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="298.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.0" minWidth="10.0" prefWidth="302.0" />
