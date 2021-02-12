@@ -22,6 +22,7 @@ import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.input.MouseButton
+import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import kotlinx.coroutines.GlobalScope
 import tornadofx.*
@@ -45,9 +46,8 @@ class HomeController : AbstractView("") {
     private val historyBtn: Button by fxid("historyBtn")
     private val autoWeight: Button by fxid("autoWeight")
     private val manualWeight: Button by fxid("manualWeight")
-    private val driversCombo: ComboBox<Driver> by fxid("driversCombo")
 
-    override val root: GridPane by fxml("/view/client/HomeView.fxml")
+    override val root: BorderPane by fxml("/view/client/HomeView.fxml")
     private val transactionRepo = BinTransactionRepo()
     private val transModel = BinTransactionModel()
     private var binLogged = 0
@@ -60,7 +60,6 @@ class HomeController : AbstractView("") {
         transModel.item
 
         binWeight.isDisable = true //prevent weight being edited in auto
-        driversCombo.isVisible = false //initially hide drivers combo
 
         idCode.apply {
 
