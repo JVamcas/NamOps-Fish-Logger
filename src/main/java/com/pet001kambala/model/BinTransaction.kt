@@ -115,4 +115,6 @@ class BinTransactionModel : ItemViewModel<BinTransaction>() {
     }
 }
 
+class TextValue { val value = SimpleStringProperty() }
+
 class TextModel(val property: StringProperty): ItemViewModel<String>()

@@ -4,6 +4,7 @@ import com.pet001kambala.controller.AbstractView
 import com.pet001kambala.model.TextModel
 import com.pet001kambala.utils.ParseUtil.Companion.isNumber
 import javafx.scene.input.KeyCode
+import javafx.stage.Modality
 import javafx.stage.StageStyle
 import tornadofx.*
 
@@ -42,5 +43,7 @@ class KeyboardController : AbstractView("Keyboard") {
         super.onBeforeShow()
         currentStage?.isResizable = false
         currentStage?.initStyle(StageStyle.UTILITY)
+        currentStage?.isAlwaysOnTop = true
+        currentStage?.initModality(Modality.WINDOW_MODAL)
     }
 }

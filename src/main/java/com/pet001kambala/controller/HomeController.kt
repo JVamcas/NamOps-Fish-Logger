@@ -14,6 +14,7 @@ import com.pet001kambala.utils.ParseUtil.Companion.strip
 import com.pet001kambala.utils.Results
 import com.pet001kambala.utils.WeighingScaleReader
 import javafx.application.Platform
+import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.ObservableList
 import javafx.event.EventHandler
@@ -24,6 +25,7 @@ import javafx.scene.control.TextField
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
+import javafx.stage.Modality
 import kotlinx.coroutines.GlobalScope
 import tornadofx.*
 import java.sql.Timestamp
@@ -54,7 +56,6 @@ class HomeController : AbstractView("") {
     private var scaleReader: WeighingScaleReader
 
     private val validDriver = AtomicBoolean(false)
-    lateinit var keypad: KeyboardController
 
     init {
         transModel.item
@@ -259,17 +260,11 @@ class HomeController : AbstractView("") {
 
         historyBtn.apply {
             action {
-                setInScope(transModel, scope)
-                find(CurrentTransactionTableController::class, scope).openModal()
+                val model = TextModel(SimpleStringProperty())
+                setInScope(model, scope)
+                find(CurrentTransactionTableController::class, scope).openModal(modality = Modality.APPLICATION_MODAL)
             }
         }
-    }
-
-    private fun showKeyPad(property: StringProperty) {
-        val scope = Scope()
-        val model = TextModel(property)
-        setInScope(model, scope)
-        keypad = find(KeyboardController::class, scope).also { it.openModal() }
     }
 
     private fun saveTransaction(pitNo: String) {
@@ -301,9 +296,7 @@ class HomeController : AbstractView("") {
         }
     }
 
-    private fun closeKeyPad() {
-        keypad.closeView()
-    }
+
 
     override fun onDock() {
         super.onDock()

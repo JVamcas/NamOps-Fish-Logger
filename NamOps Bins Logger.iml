@@ -125,5 +125,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-media:win:11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-web:11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-web:win:11" level="project" />
+    <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.4" level="project" />
   </component>
 </module>

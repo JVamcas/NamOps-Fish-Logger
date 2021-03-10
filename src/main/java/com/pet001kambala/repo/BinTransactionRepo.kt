@@ -10,16 +10,18 @@ import tornadofx.*
 
 class BinTransactionRepo : AbstractRepo<BinTransaction>() {
 
-    suspend fun loadCurrentTransactionBins(): Results {
+    suspend fun loadCurrentTransactionBins(waybill: String): Results {
 
         var session: Session? = null
         return try {
             withContext(Dispatchers.Default) {
                 session = sessionFactory?.openSession()
-                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=(SELECT waybill_number FROM bins_transactions ORDER BY id DESC LIMIT 1)"
+//                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=(SELECT waybill_number FROM bins_transactions ORDER BY id DESC LIMIT 1)"
+                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=:waybill"
                 val data =
                     session
                         ?.createNativeQuery(qryStr, BinTransaction::class.java)
+                        ?.setParameter("waybill",waybill)
                         ?.resultList
                         ?.filterNotNull()
                         ?.toObservable()

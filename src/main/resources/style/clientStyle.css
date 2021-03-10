@@ -87,6 +87,15 @@
     -fx-background-radius: 0px 10px 10px 0px;
 }
 
+#bin-search-by-waybill{
+    -fx-background-color: #033a4f;
+}
+#search-bin-indicator{
+    -fx-progress-color: #b14040;
+    -fx-max-height: 24px;
+    -fx-max-width: 24px;
+}
+
 
 
 

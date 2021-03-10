@@ -1,15 +1,20 @@
 package com.pet001kambala.controller
 
 import com.pet001kambala.controller.AbstractView.Error.showError
+import com.pet001kambala.keypad.KeyboardController
+import com.pet001kambala.model.TextModel
 import com.pet001kambala.utils.Results
 import javafx.application.Platform
 import javafx.beans.property.Property
+import javafx.beans.property.StringProperty
 import javafx.scene.control.Alert
 import javafx.scene.control.ComboBox
+import javafx.stage.Modality
 import tornadofx.*
 
 abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
 
+    lateinit var keypad: KeyboardController
 
     fun UIComponent.closeView() {
         Platform.runLater {
@@ -69,9 +74,14 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
         heading = viewTitle
     }
 
-//    fun isLoggedIn() = currentUser.get().isInvalid()
-//
-//    fun logout() {
-//        currentUser.set(User())
-//    }
+    fun showKeyPad(property: StringProperty) {
+        val scope = Scope()
+        val model = TextModel(property)
+        setInScope(model, scope)
+        keypad = find(KeyboardController::class, scope).also { it.openModal(modality = Modality.WINDOW_MODAL) }
+    }
+
+     fun closeKeyPad() {
+        keypad.closeView()
+    }
 }
