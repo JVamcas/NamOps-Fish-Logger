@@ -13,6 +13,7 @@ import com.pet001kambala.utils.ParseUtil.Companion.isValidWayBill
 import com.pet001kambala.utils.ParseUtil.Companion.strip
 import com.pet001kambala.utils.Results
 import com.pet001kambala.utils.WeighingScaleReader
+import com.sun.net.httpserver.Authenticator
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
@@ -276,26 +277,38 @@ class HomeController : AbstractView("") {
         }
 
         GlobalScope.launch {
-            val results = transactionRepo.addNewModel(trans)
+            var results: Results = transactionRepo.findBinTransaction(
+                transModel.wayBillNo.get(),
+                (binLogged + 1).toString()
+            ) //find bin transaction by waybill and number
+
             if (results is Results.Success<*>) {
-                binLogged++
-                Platform.runLater {
-                    val pendingBins = noOfBins.text.toInt() - binLogged
-                    this@HomeController.pendingBins.text = pendingBins.toString()
-                    if (pendingBins == 0) {
-                        binLogged = 0
-                        transModel.reset(factory.items.first(), fishType.items.first())
-                        idCode.clear()
-                        validDriver.set(false)
-                        noOfBins.clear()
-                    }
-                }
-                transModel.toNextBin()
-            } else
-                parseResults(results)
+                val data = results.data as List<BinTransaction>
+                if (data.isNullOrEmpty()) {
+                    results = transactionRepo.addNewModel(trans)
+                    if (results is Results.Success<*>) {
+                        binLogged++
+                        Platform.runLater {
+                            val pendingBins = noOfBins.text.toInt() - binLogged
+                            this@HomeController.pendingBins.text = pendingBins.toString()
+                            if (pendingBins == 0) {
+                                binLogged = 0
+                                transModel.reset(factory.items.first(), fishType.items.first())
+                                idCode.clear()
+                                validDriver.set(false)
+                                noOfBins.clear()
+                            }
+                        }
+                        transModel.toNextBin()
+                    } else
+                        parseResults(results)
+                } else Error.showError(
+                    header = "Duplicate bin entry error!",
+                    msg = "Bin #${transModel.item.binNoProperty.get()} on waybill #${transModel.wayBillNo.get()} is already on the database."
+                )
+            } else parseResults(results)
         }
     }
-
 
 
     override fun onDock() {
