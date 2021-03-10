@@ -17,7 +17,7 @@ class BinTransactionRepo : AbstractRepo<BinTransaction>() {
             withContext(Dispatchers.Default) {
                 session = sessionFactory?.openSession()
 //                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=(SELECT waybill_number FROM bins_transactions ORDER BY id DESC LIMIT 1)"
-                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=:waybill"
+                val qryStr = "SELECT  * FROM bins_transactions t WHERE t.waybill_number=:waybill AND t.deleted=false"
                 val data =
                     session
                         ?.createNativeQuery(qryStr, BinTransaction::class.java)
@@ -38,7 +38,7 @@ class BinTransactionRepo : AbstractRepo<BinTransaction>() {
         var session: Session? = null
         return try {
             withContext(Dispatchers.Default){
-                val qryStr = "SELECT * FROM bins_transactions t WHERE t.waybill_number=:waybill and t.bin_number=:binNumber"
+                val qryStr = "SELECT * FROM bins_transactions t WHERE t.waybill_number=:waybill AND t.bin_number=:binNumber AND t.deleted=false"
                 session = sessionFactory?.openSession()
                 val data = session
                     ?.createNativeQuery(qryStr,BinTransaction::class.java)
