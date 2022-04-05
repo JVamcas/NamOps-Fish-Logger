@@ -78,10 +78,11 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
         val scope = Scope()
         val model = TextModel(property)
         setInScope(model, scope)
-        keypad = find(KeyboardController::class, scope).also { it.openModal(modality = Modality.WINDOW_MODAL) }
+        keypad = find(KeyboardController::class, scope).apply { openModal(modality = Modality.WINDOW_MODAL) }
+
     }
 
-     fun closeKeyPad() {
+    fun closeKeyPad() {
         keypad.closeView()
     }
 }

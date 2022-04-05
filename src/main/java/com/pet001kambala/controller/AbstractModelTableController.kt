@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 abstract class AbstractModelTableController<T>(title: String) : AbstractView(title) {
 
     val modelList = SortedFilteredList<T>()
-    val indexColumn = TableColumn<T, String>("#")
+    private val indexColumn = TableColumn<T, String>("#")
 
     init {
         indexColumn.apply {

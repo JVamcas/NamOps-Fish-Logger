@@ -27,6 +27,7 @@ import javafx.scene.input.MouseButton
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.stage.Modality
+import javafx.stage.Stage
 import kotlinx.coroutines.GlobalScope
 import tornadofx.*
 import java.sql.Timestamp
@@ -49,6 +50,7 @@ class HomeController : AbstractView("") {
     private val historyBtn: Button by fxid("historyBtn")
     private val autoWeight: Button by fxid("autoWeight")
     private val manualWeight: Button by fxid("manualWeight")
+    private val clearPanelBtn: Button by fxid("clearPanelBtn")
 
     override val root: BorderPane by fxml("/view/client/HomeView.fxml")
     private val transactionRepo = BinTransactionRepo()
@@ -59,7 +61,6 @@ class HomeController : AbstractView("") {
     private val validDriver = AtomicBoolean(false)
 
     init {
-        transModel.item
 
         binWeight.isDisable = true //prevent weight being edited in auto
 
@@ -89,11 +90,6 @@ class HomeController : AbstractView("") {
                                     validDriver.set(true)
                                     closeKeyPad()
 
-//                                    idCode.isVisible = false
-//                                    driversCombo.isVisible = true
-//                                    driversCombo.items = driverList.asObservable()
-//                                    driversCombo.show()
-
                                     driver = driverList.firstOrNull()
                                     transModel.driver.value = driver
                                 } else validDriver.set(false)
@@ -110,16 +106,11 @@ class HomeController : AbstractView("") {
             }
         }
 
-//        driversCombo.apply {
-//            setOnAction {
-//                selectionModel.selectedItem?.apply {
-//                    transModel.driver.value = this
-//                    idCode.text = this.toString()
-//                    driversCombo.isVisible = false
-//                    idCode.isVisible = true
-//                }
-//            }
-//        }
+        clearPanelBtn.apply {
+            setOnAction {
+                resetPanel()
+            }
+        }
 
 
         factory.apply {
@@ -143,7 +134,7 @@ class HomeController : AbstractView("") {
                 val waybill = waybillNo.text
                 if (waybill.isValidWayBill())
                     null
-                else error("Waybill number should be 5 characters long.")
+                else error("Waybill number should be 5 or 6 characters long.")
             }
             setOnMouseClicked {
                 showKeyPad(textProperty())
@@ -153,12 +144,20 @@ class HomeController : AbstractView("") {
         noOfBins.apply {
             bind(transModel.noOfBins)
             validator(ValidationTrigger.OnChange()) {
-                val bins = if (!it.isNullOrEmpty()) it.toInt() else 0
+                val totalBins = if (!it.isNullOrEmpty()) it.toInt() else 0
                 when {
-                    bins < binLogged -> error("Value cannot be less than bins already recorded.")
-                    bins == 0 -> error("Enter a valid number of bins.")
+                    totalBins < binLogged -> {
+                        Error.showError(
+                            header = "Bin Number Error.",
+                            msg = "Total number of bins: $totalBins cannot be less than recorded bins: $binLogged."
+                        )
+                        error("Total number of bins: $totalBins cannot be less than recorded bins: $binLogged.")
+                    }
+                    totalBins == 0 -> error("Enter a valid number of bins.")
                     else -> {
-                        pendingBins.text = (bins - binLogged).toString()
+                        pendingBins.text = (totalBins - binLogged).toString()
+                        if (pendingBins.text.toInt() == 0)
+                            resetPanel()
                         null
                     }
                 }
@@ -263,7 +262,7 @@ class HomeController : AbstractView("") {
             action {
                 val model = TextModel(SimpleStringProperty())
                 setInScope(model, scope)
-                find(CurrentTransactionTableController::class, scope).openModal(modality = Modality.APPLICATION_MODAL)
+                find(CurrentTransactionTableController::class, scope).openModal(owner = currentWindow ,modality = Modality.WINDOW_MODAL)
             }
         }
     }
@@ -291,13 +290,9 @@ class HomeController : AbstractView("") {
                         Platform.runLater {
                             val pendingBins = noOfBins.text.toInt() - binLogged
                             this@HomeController.pendingBins.text = pendingBins.toString()
-                            if (pendingBins == 0) {
-                                binLogged = 0
-                                transModel.reset(factory.items.first(), fishType.items.first())
-                                idCode.clear()
-                                validDriver.set(false)
-                                noOfBins.clear()
-                            }
+
+                            if (pendingBins == 0)
+                                resetPanel()
                         }
                         transModel.toNextBin()
                     } else
@@ -310,11 +305,19 @@ class HomeController : AbstractView("") {
         }
     }
 
+    private fun resetPanel() {
+        pendingBins.text = "0"
+        binLogged = 0
+        transModel.reset(factory.items.first(), fishType.items.first())
+        idCode.clear()
+        validDriver.set(false)
+        noOfBins.clear()
+    }
+
 
     override fun onDock() {
         super.onDock()
         workspace.header.hide()
         currentStage?.isMaximized = true
     }
-
 }

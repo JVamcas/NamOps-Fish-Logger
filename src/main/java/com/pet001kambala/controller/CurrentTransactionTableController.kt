@@ -118,15 +118,6 @@ class CurrentTransactionTableController : AbstractModelTableController<BinTransa
 
     override suspend fun loadModels(): ObservableList<BinTransaction> {
 
-//        val results = BinTransactionRepo().loadCurrentTransactionBins()
-//
-//        return if (results is Results.Success<*>)
-//            results.data as ObservableList<BinTransaction>
-//        else {
-//            parseResults(results)
-//            observableListOf()
-//        }
-
         return observableListOf()
     }
 

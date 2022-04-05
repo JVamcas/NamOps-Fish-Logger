@@ -143,6 +143,10 @@
             </Button>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <children>
+                  <Button fx:id="clearPanelBtn" mnemonicParsing="false" style="-fx-background-color: #F5113B; -fx-background-radius: 15;" text="Clear" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font></Button>
                   <Separator prefWidth="200.0" visible="false" />
                   <Label fx:id="pendingBins" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="220.0" text="Pending bins:" textAlignment="CENTER" textFill="WHITE">
                      <font>

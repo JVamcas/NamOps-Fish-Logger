@@ -23,9 +23,12 @@ class KeyboardController : AbstractView("Keyboard") {
 
                     curTxt = when {
                         kMeta == KeyCode.SEPARATOR || keyTxt.isNumber() -> curTxt + keyTxt
-                        kMeta == KeyCode.DELETE -> curTxt.substring(0, if (curTxt.isEmpty()) 0 else curTxt.length - 1)
+                        kMeta == KeyCode.DELETE || kMeta == KeyCode.BACK_SPACE -> curTxt.substring(
+                            0,
+                            if (curTxt.isEmpty()) 0 else curTxt.length - 1
+                        )
                         kMeta == KeyCode.CLEAR -> ""
-                        kMeta == KeyCode.ENTER -> {
+                        kMeta == KeyCode.ENTER || kMeta == KeyCode.CANCEL -> {
                             closeView()
                             curTxt
                         }
@@ -36,7 +39,6 @@ class KeyboardController : AbstractView("Keyboard") {
             })
         })
     }
-
 
 
     override fun onBeforeShow() {

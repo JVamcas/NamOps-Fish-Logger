@@ -57,7 +57,7 @@ class ParseUtil {
         }
 
         fun String?.isValidWayBill(): Boolean {
-            return this.isNumber() && this?.length == 5
+            return this.isNumber() && (this?.length in 5 until 7)
         }
 
         fun String?.isValidBinWeight(): Boolean {

@@ -32,7 +32,7 @@ class WeighingScaleReader(private val property: SimpleStringProperty) {
                     if (data.size == 17) {
                         val weightArray = data.copyOfRange(2, 8)
                         val weight = String(weightArray, Charset.forName("UTF-8")).toInt()
-                        Platform.runLater { property.set("$weight KG") }
+                        Platform.runLater { property.set(weight.toString()) }
                     }
                 }
             }
@@ -47,7 +47,6 @@ class WeighingScaleReader(private val property: SimpleStringProperty) {
             }
         })
         comPort.openPort()
-
     }
 
     fun stopRead() {
