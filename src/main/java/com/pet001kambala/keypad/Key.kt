@@ -16,8 +16,11 @@ import javafx.scene.layout.Region
 import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 import java.util.concurrent.ConcurrentHashMap
+import org.slf4j.LoggerFactory
 
 class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
+
+    private val logger = LoggerFactory.getLogger(Key::class.java)
 
     private val CSS_FILE = "style/numberpad/key.css"
     private val PREFERRED_WIDTH = 64.0
@@ -65,6 +68,7 @@ class Key(keyText: String? = null, metaData: KeyCode? = null) : Region() {
         }
         initGraphics()
         registerListeners()
+        logger.debug("Key created with text={}", keyText)
     }
 
     /***************************************************************************

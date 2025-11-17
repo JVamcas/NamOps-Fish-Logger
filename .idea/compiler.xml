@@ -7,8 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tornadofx-empty-maven-project" />
-        <module name="NamOps Bins Logger" />
         <module name="tornadofx-empty-project" />
+        <module name="tornadofx-maven-project" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

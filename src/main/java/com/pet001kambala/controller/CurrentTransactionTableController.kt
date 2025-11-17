@@ -16,8 +16,11 @@ import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tornadofx.*
+import org.slf4j.LoggerFactory
 
 class CurrentTransactionTableController : AbstractModelTableController<BinTransaction>("") {
+
+    private val logger = LoggerFactory.getLogger(CurrentTransactionTableController::class.java)
 
     lateinit var progress: ProgressIndicator
     override val root = vbox {
@@ -133,5 +136,6 @@ class CurrentTransactionTableController : AbstractModelTableController<BinTransa
         currentStage?.initStyle(StageStyle.UTILITY)
         currentStage?.isAlwaysOnTop = true
         currentStage?.initModality(Modality.WINDOW_MODAL)
+        logger.debug("CurrentTransactionTableController about to show")
     }
 }

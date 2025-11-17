@@ -11,8 +11,11 @@ import javafx.scene.control.Alert
 import javafx.scene.control.ComboBox
 import javafx.stage.Modality
 import tornadofx.*
+import org.slf4j.LoggerFactory
 
 abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
+
+    private val logger = LoggerFactory.getLogger(AbstractView::class.java)
 
     lateinit var keypad: KeyboardController
 
@@ -57,6 +60,8 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
                         msg = "Computer appears to be offline. Please refresh your connections."
                     )
                 }
+
+                Results.Error.CODE.DUPLICATE_WAYBILL -> showError("Invalid waybill","Waybill number already exists in the system.")
             }
         }
     }
@@ -72,6 +77,7 @@ abstract class AbstractView(private val viewTitle: String) : View(viewTitle) {
         currentStage?.isMaximized = false
         title = "SeaNam Bins Logger"
         heading = viewTitle
+        logger.debug("AbstractView onDock for title={}", viewTitle)
     }
 
     fun showKeyPad(property: StringProperty) {

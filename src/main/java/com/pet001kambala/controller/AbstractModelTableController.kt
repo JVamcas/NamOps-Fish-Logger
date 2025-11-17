@@ -9,8 +9,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tornadofx.*
 import kotlin.reflect.KClass
+import org.slf4j.LoggerFactory
 
 abstract class AbstractModelTableController<T>(title: String) : AbstractView(title) {
+
+    private val logger = LoggerFactory.getLogger(AbstractModelTableController::class.java)
 
     val modelList = SortedFilteredList<T>()
     private val indexColumn = TableColumn<T, String>("#")
@@ -33,6 +36,7 @@ abstract class AbstractModelTableController<T>(title: String) : AbstractView(tit
                 }
             }
         }
+        logger.debug("AbstractModelTableController initialized for title={}", title)
     }
 
     override fun onDock() {
@@ -53,4 +57,3 @@ abstract class AbstractModelTableController<T>(title: String) : AbstractView(tit
 
     abstract suspend fun loadModels(): ObservableList<T>
 }
-

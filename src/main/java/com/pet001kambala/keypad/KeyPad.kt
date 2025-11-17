@@ -7,8 +7,11 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Region
 import java.util.ArrayList
 import java.util.function.Consumer
+import org.slf4j.LoggerFactory
 
 class KeyPad(horizontalGap: Double = 5.0, verticalGap: Double = 5.0) : Region() {
+
+    private val logger = LoggerFactory.getLogger(KeyPad::class.java)
 
     private val CSS_FILE = "style/numberpad/numberpad.css"
     private val PREFERRED_WIDTH = 340.0
@@ -53,6 +56,7 @@ class KeyPad(horizontalGap: Double = 5.0, verticalGap: Double = 5.0) : Region() 
         this.verticalGap = verticalGap
         initGraphics()
         registerListeners()
+        logger.debug("KeyPad initialized with hGap={} vGap={}", horizontalGap, verticalGap)
     }
 
 

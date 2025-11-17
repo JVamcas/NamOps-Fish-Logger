@@ -1,6 +1,8 @@
 package com.pet001kambala.utils
 
 
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import com.pet001kambala.model.BinTransaction
 import com.pet001kambala.model.BinTransactionModel
 import com.pet001kambala.model.Factory
@@ -8,12 +10,16 @@ import com.pet001kambala.model.Fish
 import javafx.scene.control.TextField
 import tornadofx.*
 import java.lang.Double.parseDouble
+import java.util.Random
+import java.util.UUID
 import java.util.regex.Pattern
+import org.slf4j.LoggerFactory
 
 class ParseUtil {
 
     companion object {
 
+        private val logger = LoggerFactory.getLogger(ParseUtil::class.java)
 
         fun String?.isValidPassword() = this != null && this.length >= 4
 
@@ -50,6 +56,30 @@ class ParseUtil {
                     it.factory = factory
                     it.fish = fish
                 }
+        }
+        inline fun <I, reified O> I.convert(): O {
+            val json = this.toJson()
+            return Gson().fromJson(json, object : TypeToken<O>() {}.type)
+        }
+
+        inline fun <reified O> String.convert(): O {
+            return Gson().fromJson(this, object : TypeToken<O>() {}.type)
+        }
+
+        fun <K> K.toJson(): String {
+            return Gson().toJson(this)
+        }
+
+        fun generateID(length: Int): String {
+            val uuid = UUID.randomUUID().toString().replace("-", "")
+            val random = Random()
+            val buffer = StringBuilder()
+
+            repeat(length) {
+                buffer.append(uuid[random.nextInt(uuid.length)])
+            }
+
+            return buffer.toString()
         }
 
         fun String?.isValidIdCode(): Boolean {

@@ -6,9 +6,12 @@ import com.pet001kambala.utils.ParseUtil.Companion.isNumber
 import javafx.scene.input.KeyCode
 import javafx.stage.Modality
 import javafx.stage.StageStyle
+import org.slf4j.LoggerFactory
 import tornadofx.*
 
 class KeyboardController : AbstractView("Keyboard") {
+
+    private val logger = LoggerFactory.getLogger(KeyboardController::class.java)
 
     val tModel: TextModel by inject()
 
@@ -47,5 +50,6 @@ class KeyboardController : AbstractView("Keyboard") {
         currentStage?.initStyle(StageStyle.UTILITY)
         currentStage?.isAlwaysOnTop = true
         currentStage?.initModality(Modality.WINDOW_MODAL)
+        logger.debug("KeyboardController about to show")
     }
 }

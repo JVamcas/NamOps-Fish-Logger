@@ -8,13 +8,16 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import org.slf4j.LoggerFactory
 
 class DateUtil {
     companion object {
+        private val logger = LoggerFactory.getLogger(DateUtil::class.java)
         const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
 
         fun today(): Timestamp {
             val date = Date()
+            logger.debug("DateUtil.today() called")
             return Timestamp(date.time)
         }
 

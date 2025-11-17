@@ -33,8 +33,11 @@ import tornadofx.*
 import java.sql.Timestamp
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
+import org.slf4j.LoggerFactory
 
 class HomeController : AbstractView("") {
+
+    private val logger = LoggerFactory.getLogger(HomeController::class.java)
 
     private val idCode: TextField by fxid("iDcode")
     private val pit_1: Button by fxid("pit_1")
@@ -61,6 +64,8 @@ class HomeController : AbstractView("") {
     private val validDriver = AtomicBoolean(false)
 
     init {
+
+        logger.info("HomeController initialized")
 
         binWeight.isDisable = true //prevent weight being edited in auto
 
@@ -92,6 +97,7 @@ class HomeController : AbstractView("") {
 
                                     driver = driverList.firstOrNull()
                                     transModel.driver.value = driver
+                                    logger.info("Driver found and set: {}", driver)
                                 } else validDriver.set(false)
                             } else {
                                 validDriver.set(false)
@@ -108,6 +114,7 @@ class HomeController : AbstractView("") {
 
         clearPanelBtn.apply {
             setOnAction {
+                logger.info("Clear panel triggered by user")
                 resetPanel()
             }
         }
@@ -122,6 +129,7 @@ class HomeController : AbstractView("") {
                         val factoryList = results.data as ObservableList<Factory>
                         items = factoryList
                         factory.value = factoryList.firstOrNull()
+                        logger.info("Loaded {} factories", factoryList.size)
                     }
                 }
             }
@@ -176,6 +184,7 @@ class HomeController : AbstractView("") {
                         val fishList = results.data as ObservableList<Fish>
                         items = fishList
                         fishType.value = fishList.firstOrNull()
+                        logger.info("Loaded {} fish types", fishList.size)
                     }
                 }
             }
@@ -199,6 +208,7 @@ class HomeController : AbstractView("") {
 
         autoWeight.apply {
             action {
+                logger.info("Switched to auto weight mode")
                 scaleReader.stopRead() //1. clear up previous instance of scale reader
                 scaleReader = WeighingScaleReader(transModel.binWeight) //2. init new scale
                 scaleReader.read()
@@ -210,6 +220,7 @@ class HomeController : AbstractView("") {
         }
         manualWeight.apply {
             action {
+                logger.info("Switched to manual weight mode")
                 scaleReader.stopRead()
                 binWeight.isDisable = false
                 style = "-fx-background-color: #47a947;"
@@ -222,6 +233,7 @@ class HomeController : AbstractView("") {
             onMouseClicked = EventHandler { event ->
                 if (event?.button == MouseButton.PRIMARY) {
                     if (event.clickCount == 2) {
+                        logger.info("Saving transaction to pit 1")
                         saveTransaction("1")
                     }
                 }
@@ -232,6 +244,7 @@ class HomeController : AbstractView("") {
             onMouseClicked = EventHandler { event ->
                 if (event?.button == MouseButton.PRIMARY) {
                     if (event.clickCount == 2) {
+                        logger.info("Saving transaction to pit 2")
                         saveTransaction("2")
                     }
                 }
@@ -242,6 +255,7 @@ class HomeController : AbstractView("") {
             onMouseClicked = EventHandler { event ->
                 if (event?.button == MouseButton.PRIMARY) {
                     if (event.clickCount == 2) {
+                        logger.info("Saving transaction to pit 3")
                         saveTransaction("3")
                     }
                 }
@@ -252,6 +266,7 @@ class HomeController : AbstractView("") {
             onMouseClicked = EventHandler { event ->
                 if (event?.button == MouseButton.PRIMARY) {
                     if (event.clickCount == 2) {
+                        logger.info("Saving transaction to pit 4")
                         saveTransaction("4")
                     }
                 }
@@ -275,6 +290,8 @@ class HomeController : AbstractView("") {
             it.binNoProperty.set((binLogged + 1).toString())
         }
 
+        logger.info("Attempting to save bin transaction: waybill={}, binNo={}, pit={} ", trans.waybillNoProperty.get(), trans.binNoProperty.get(), pitNo)
+
         GlobalScope.launch {
             var results: Results = transactionRepo.findBinTransaction(
                 transModel.wayBillNo.get(),
@@ -295,6 +312,7 @@ class HomeController : AbstractView("") {
                                 resetPanel()
                         }
                         transModel.toNextBin()
+                        logger.info("Successfully saved transaction for waybill={} bin={}", trans.waybillNoProperty.get(), trans.binNoProperty.get())
                     } else
                         parseResults(results)
                 } else Error.showError(
@@ -312,6 +330,7 @@ class HomeController : AbstractView("") {
         idCode.clear()
         validDriver.set(false)
         noOfBins.clear()
+        logger.info("Panel reset to defaults")
     }
 
 
